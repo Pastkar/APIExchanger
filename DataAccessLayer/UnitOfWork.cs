@@ -11,9 +11,9 @@ namespace DataAccessLayer
     public class UnitOfWork: IUnitOfWork
     {
         private Context DataBase { get; }
-        private ClientRepository clientRepository;
-        private OperationRepository operationRepository;
-        private OperatorRepository operatorRepository;
+        private ClientRepository _clientRepository;
+        private OperationRepository _operationRepository;
+        private OperatorRepository _operatorRepository;
 
         public UnitOfWork()
         {
@@ -24,27 +24,27 @@ namespace DataAccessLayer
         {
             get
             {
-                if (clientRepository == null)
-                    clientRepository = new ClientRepository(DataBase);
-                return clientRepository;
+                if (_clientRepository == null)
+                    _clientRepository = new ClientRepository(DataBase);
+                return _clientRepository;
             }
         }
         public IRepository<Operation> Operations
         {
             get
             {
-                if (operationRepository == null)
-                    operationRepository = new OperationRepository(DataBase);
-                return operationRepository;
+                if (_operationRepository == null)
+                    _operationRepository = new OperationRepository(DataBase);
+                return _operationRepository;
             }
         }
         public IRepository<Operator> Operators
         {
             get
             {
-                if (operatorRepository == null)
-                    operatorRepository = new OperatorRepository(DataBase);
-                return operatorRepository;
+                if (_operatorRepository == null)
+                    _operatorRepository = new OperatorRepository(DataBase);
+                return _operatorRepository;
             }
         }
 

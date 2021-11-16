@@ -9,24 +9,24 @@ namespace DataAccessLayer.Repositories
 {
     public class OperationRepository : IRepository<Operation>
     {
-        private Context DB;
+        private readonly Context _dB;
 
         public OperationRepository(Context context)
         {
-            DB = context;
+            _dB = context;
         }
 
         public IEnumerable<Operation> ReadAll()
         {
-            return DB.Operations;
+            return _dB.Operations;
         }
         public Operation Read(int id)
         {
-            return DB.Operations.Find(id);
+            return _dB.Operations.Find(id);
         }
         public void Create(Operation game)
         {
-            DB.Operations.Add(game);
+            _dB.Operations.Add(game);
         }
         public void Update(Operation game,int id    )
         {
@@ -34,9 +34,9 @@ namespace DataAccessLayer.Repositories
         }
         public void Delete(int id)
         {
-            Operation game = DB.Operations.Find(id);
+            Operation game = _dB.Operations.Find(id);
             if (game != null)
-                DB.Operations.Remove(game);
+                _dB.Operations.Remove(game);
         }
     }
 }
