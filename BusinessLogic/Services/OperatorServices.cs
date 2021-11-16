@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
 {
-    public class OperatorServices : IOperatorServices,IDisposable
+    public class OperatorServices : IRepositoryBl<OperatorBl,OperatorCreateBl>,IDisposable
     {
         private IUnitOfWork _dB;
         private readonly IMapper _mapper;
@@ -50,7 +50,7 @@ namespace BusinessLogic.Services
             return result;
         }
 
-        public void UpdateClient(OperatorCreateBl element, int id)
+        public void Update(OperatorCreateBl element, int id)
         {
             var toUpdate = _dB.Operators.Read(id);
 

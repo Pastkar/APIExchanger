@@ -37,8 +37,8 @@ namespace ExchangerLastVersion
            
             services.AddControllers();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IClientServices, ClientServices>();
-            services.AddScoped<IOperatorServices, OperatorServices>();
+            services.AddScoped<IRepositoryBl<ClientBl,ClientCreateBl>, ClientServices>();
+            services.AddScoped<IRepositoryBl<OperatorBl,OperatorCreateBl>, OperatorServices>();
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddRouting();
             services.AddSwaggerGen(c =>

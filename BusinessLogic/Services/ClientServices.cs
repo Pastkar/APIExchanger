@@ -13,7 +13,7 @@ using DataAccessLayer;
 
 namespace BusinessLogic.Services
 {
-    public class ClientServices : IDisposable, IClientServices
+    public class ClientServices : IDisposable, IRepositoryBl<ClientBl,ClientCreateBl>
     {
         private IUnitOfWork _dB;
         private readonly IMapper _mapper;
@@ -22,9 +22,9 @@ namespace BusinessLogic.Services
             _mapper = mapper;
             _dB = new UnitOfWork();
         }
-        public void Create(ClientCreateBl clientToCreate)
+        public void Create(ClientCreateBl element)
         {
-            var client = _mapper.Map<Client>(clientToCreate);
+            var client = _mapper.Map<Client>(element);
             _dB.Clients.Create(client);
             _dB.Save();
         }
@@ -63,9 +63,9 @@ namespace BusinessLogic.Services
             return mapperClient;
         }
 
-        public void UpdateClient(ClientCreateBl element,int id)
+        public void Update(ClientCreateBl element,int id)
         {
-            Client toUpdate = _dB.Clients.Read(id);
+            var toUpdate = _dB.Clients.Read(id);
 
             if (toUpdate != null)
             {

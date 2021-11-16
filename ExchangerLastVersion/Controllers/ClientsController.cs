@@ -18,9 +18,9 @@ namespace ExchangerLastVersion.Controllers
     [ApiController]
     public class ClientsController : Controller
     {
-        private IClientServices _clientService;
+        private readonly IRepositoryBl<ClientBl,ClientCreateBl> _clientService;
         private readonly IMapper _mapper;
-        public ClientsController(IMapper mapper, IClientServices clientService)
+        public ClientsController(IMapper mapper, IRepositoryBl<ClientBl, ClientCreateBl> clientService)
         {
             _clientService = clientService;
             _mapper = mapper;
@@ -82,7 +82,7 @@ namespace ExchangerLastVersion.Controllers
             //    Passport = passport,
             //    Phone = phone
             //};
-            _clientService.UpdateClient(_mapper.Map<ClientCreateBl>(model),id);
+            _clientService.Update(_mapper.Map<ClientCreateBl>(model),id);
             return Ok();
         }
     }

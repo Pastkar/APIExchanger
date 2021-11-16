@@ -15,9 +15,9 @@ namespace ExchangerLastVersion.Controllers
     [ApiController]
     public class OperatorController : Controller
     {
-        private IOperatorServices _operatorService;
+        private readonly IRepositoryBl<OperatorBl, OperatorCreateBl> _operatorService;
         private readonly IMapper _mapper;
-        public OperatorController(IMapper mapper, IOperatorServices operatorService)
+        public OperatorController(IMapper mapper, IRepositoryBl<OperatorBl, OperatorCreateBl> operatorService)
         {
             _operatorService = operatorService;
             _mapper = mapper;
@@ -60,7 +60,7 @@ namespace ExchangerLastVersion.Controllers
         {
             if (_operatorService.ReadById(id) == null)
                 return NotFound();
-            _operatorService.UpdateClient(_mapper.Map<OperatorCreateBl>(model), id);
+            _operatorService.Update(_mapper.Map<OperatorCreateBl>(model), id);
             return Ok();
         }
     }
