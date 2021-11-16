@@ -9,45 +9,48 @@ namespace DataAccessLayer.Repositories
 {
     public class OperatorRepository  : IRepository<Operator>
     {
-        private Context DB;
+        private readonly Context _dB;
 
         public OperatorRepository(Context context)
         {
-            DB = context;
+            _dB = context;
         }
 
         public IEnumerable<Operator> ReadAll()
         {
-            return DB.Operators;
+            return _dB.Operators;
         }
         public Operator Read(int id)
         {
-            return DB.Operators.Find(id);
+            return _dB.Operators.Find(id);
         }
         public void Create(Operator operetor)
         {
-            DB.Operators.Add(operetor);
+            _dB.Operators.Add(operetor);
         }
         public void Update(Operator operetor, int id)
         {
-            var previousOperator = DB.Operators.Find(operetor.Id);
+            var previousOperator = _dB.Operators.Find(id);
 
             if (previousOperator != null)
             {
-                DB.Operators.Remove(previousOperator);
+                _dB.Operators.Remove(previousOperator);
                 Operator newOperator = new Operator()
                 {
-                   
+                    Name = operetor.Name,
+                    Surname = operetor.Surname,
+                    Adress = operetor.Adress,
+                    Phone = operetor.Phone
                 };
 
-                DB.Operators.Add(newOperator);
+                _dB.Operators.Add(newOperator);
             }
         }
         public void Delete(int id)
         {
-            Operator operetor = DB.Operators.Find(id);
+            var operetor = _dB.Operators.Find(id);
             if (operetor != null)
-                DB.Operators.Remove(operetor);
+                _dB.Operators.Remove(operetor);
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace BusinessLogic.Entities
+namespace ExchangerLastVersion.Models
 {
-    public class OperatorBl
+    public class OperatorCreateModel
     {
         public string Name { get; set; }
         public string Surname { get; set; }

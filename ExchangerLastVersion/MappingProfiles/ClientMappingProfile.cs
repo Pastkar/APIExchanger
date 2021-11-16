@@ -18,7 +18,6 @@ namespace ExchangerLastVersion.MappingProfiles
 
             CreateMap<Client, ClientBl>();
             CreateMap<ClientCreateBl, Client>();
-
         }
     }
 }

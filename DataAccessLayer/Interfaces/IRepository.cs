@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataAccessLayer.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T> where T  : class
     {
         IEnumerable<T> ReadAll();
         T Read(int id);

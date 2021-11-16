@@ -36,8 +36,8 @@ namespace ExchangerLastVersion.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var client = _mapper.Map<ClientModel>(_clientService.ReadById(id));
-            return Ok(client);
+            var result = _mapper.Map<ClientModel>(_clientService.ReadById(id));
+            return Ok(result);
         }
         [HttpPost]
         public IActionResult AddClients([FromBody] ClientCreateModel model)
@@ -45,8 +45,8 @@ namespace ExchangerLastVersion.Controllers
             if (model == null)
                 return BadRequest();
 
-            var mappedCarBrand = _mapper.Map<ClientCreateBl>(model);
-            _clientService.Create(mappedCarBrand);
+            var result = _mapper.Map<ClientCreateBl>(model);
+            _clientService.Create(result);
             //_clientService client = new ClientCreateModel()
             //{
             //    Name = name,

@@ -9,7 +9,7 @@ namespace BusinessLogic.Interfaces
 {
     public interface IClientServices
     {
-        void Create(ClientCreateBl clientToCreate);
+        void Create(ClientCreateBl element);
         ClientBl ReadById(int id);
         IEnumerable<ClientBl> ReadAll();
         void Delete(int id);

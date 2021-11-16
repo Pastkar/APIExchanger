@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
 {
-    class OperationServices
+    public class OperationServices
     {
     }
 }

@@ -24,11 +24,9 @@ namespace BusinessLogic.Services
         }
         public void Create(ClientCreateBl clientToCreate)
         {
-            var brand = _mapper.Map<Client>(clientToCreate);
-            _dB.Clients.Create(brand);
+            var client = _mapper.Map<Client>(clientToCreate);
+            _dB.Clients.Create(client);
             _dB.Save();
-            //_dB.Clients.Create(_mapper.Map<Client>(item));
-            //_dB.Save();
         }
 
         public void Dispose()
@@ -47,8 +45,8 @@ namespace BusinessLogic.Services
             //    result.Add(_mapper.Map<ClientBl>(item));
             //    var t = true;
             //}
-            var test = _dB.Clients.ReadAll();
-            var result = _mapper.Map<IEnumerable<ClientBl>>(test);
+            var clients = _dB.Clients.ReadAll();
+            var result = _mapper.Map<IEnumerable<ClientBl>>(clients);
 
             return result;
         }
