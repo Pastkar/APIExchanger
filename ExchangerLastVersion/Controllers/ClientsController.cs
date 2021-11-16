@@ -8,20 +8,48 @@ using BusinessLogic;
 using BusinessLogic.Entities;
 using AutoMapper;
 using ExchangerLastVersion.Models;
+using BusinessLogic.Interfaces;
+using BusinessLogic.Services;
+using System.Net;
 
 namespace ExchangerLastVersion.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ClientsController : Controller
     {
-        public static int currentEditionID;
-
-        public IActionResult AddPage()
+        private IClientServices _carBrandService;
+        private readonly IMapper _mapper;
+        //IRepositoryBL<ClientBl>
+        public ClientsController(IMapper mapper, IClientServices carBrandService)
         {
-            return View();
+            _carBrandService = carBrandService;
+            _mapper = mapper;
         }
-        public IActionResult AddClients(string name, string surname,  string birthDay, string adress, int phone,int passport)
+        [HttpGet()]
+        public IActionResult GetAll()
         {
-            ClientModel client = new ClientModel()
+            List<ClientModel> list = null;
+            list = _mapper.Map<List<ClientModel>>(_carBrandService.ReadAll());
+
+            return Ok(list);
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var client = _mapper.Map<ClientModel>(_carBrandService.ReadById(id));
+            return Ok(client);
+        }
+        [HttpPost]
+        public IActionResult AddClients(string name, string surname, string birthDay, string adress, int phone, int passport)
+        {
+            //[FromBody] ClientCreateModel model
+            //if (model == null)
+            //    return BadRequest();
+
+            //var mappedCarBrand = _mapper.Map<ClientCreateBl>(model);
+            //_carBrandService.Create(mappedCarBrand);
+            ClientCreateModel client = new ClientCreateModel()
             {
                 Name = name,
                 Surname = surname,
@@ -30,107 +58,33 @@ namespace ExchangerLastVersion.Controllers
                 Phone = phone,
                 Passport = passport
             };
-
-            using (var db = new BL())
-                db.AddClient(Mapper.Map<ClientBl>(client));
-
-            return Redirect("~/Home/Index");
+            _carBrandService.Create(_mapper.Map<ClientCreateBl>(client));
+            return StatusCode((int)HttpStatusCode.Created);    
         }
-
-        public IActionResult SearchPage()
+        [HttpDelete("{id}")]
+        public IActionResult DeleteClient(int id)
         {
-            return View();
+            if (_carBrandService.ReadById(id) == null)
+                return NotFound();
+            _carBrandService.Delete(id);
+            return NoContent();
         }
-        public IActionResult SearchResult(string name, string surname)
+        [HttpPut("{id}")]
+        public IActionResult UpdateClient(int id, string name, string surname, string birthDay, string adress, int phone, int passport)
         {
-            List<ClientModel> foundClient = new List<ClientModel>();
-
-            using (var db = new BL())
+            if (_carBrandService.ReadById(id) == null)
+                return NotFound();
+            var newClient = new ClientCreateModel()
             {
-                foreach (ClientModel client in Mapper.Map<List<ClientModel>>(db.GetClient()))
-                {
-                    if (client.Name == name && client.Surname == surname)
-                        foundClient.Add(client);
-                }
-            }
-
-            return View("ShowAllPage", foundClient);
-        }
-
-        public IActionResult ShowAllPage()
-        {
-            List<ClientModel> list = null;
-
-            using (var db = new BL())
-                list = Mapper.Map<List<ClientModel>>(db.GetClient());
-
-            return View(list);
-        }
-        public IActionResult Delete(int id)
-        {
-            using (var db = new BL())
-                db.RemoveClient(id);
-
-            return Redirect("~/Home/Index");
-        }
-        public IActionResult DeleteAllClients()
-        {
-            using (var db = new BL())
-            {
-                foreach (ClientModel client in Mapper.Map<List<ClientModel>>(db.GetClient()))
-                    db.RemoveClient(client.Id);
-            }
-
-            return Redirect("~/Home/Index");
-        }
-
-        public IActionResult EditPage(int id)
-        {
-            ClientModel client = null;
-
-            using (var db = new BL())
-            {
-                var clients = Mapper.Map<List<ClientModel>>(db.GetClient());
-                foreach (ClientModel model in clients)
-                {
-                    if (model.Id == id)
-                    {
-                        client = model;
-                        break;
-                    }
-                }
-            }
-
-            if (client != null)
-            {
-                currentEditionID = client.Id;
-                ViewData["ClientName"] = client.Name;
-                ViewData["ClientSurname"] = client.Surname;
-                ViewData["ClientBirthDay"] = client.BirthDay;
-                ViewData["ClientAdress"] = client.Adress;
-                ViewData["ClientPhone"] = client.Phone;
-                ViewData["ClientPassport"] = client.Passport;
-            }
-
-            return View();
-        }
-        public IActionResult SaveChanges(int id, string name, string surname, string birthDay, string adress, int phone, int passport)
-        {
-            ClientModel Client = new ClientModel()
-            {
-                Id = currentEditionID,
                 Name = name,
                 Surname = surname,
                 BirthDay = birthDay,
                 Adress = adress,
                 Passport = passport,
                 Phone = phone
-        };
-
-            using (var db = new BL())
-                db.UpdateClient(Mapper.Map<ClientBl>(Client));
-
-            return Redirect("~/Home/Index");
+            };
+            _carBrandService.UpdateClient(_mapper.Map<ClientCreateBl>(newClient),id);
+            return Ok();
         }
     }
 }
