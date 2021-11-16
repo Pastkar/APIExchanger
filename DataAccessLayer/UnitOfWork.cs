@@ -11,9 +11,9 @@ namespace DataAccessLayer
     public class UnitOfWork: IUnitOfWork
     {
         private Context DataBase { get; }
-        private ClientRepository _clientRepository;
-        private OperationRepository _operationRepository;
-        private OperatorRepository _operatorRepository;
+        private IRepository<Client> _clientRepository;
+        private IRepository<Operation> _operationRepository;
+        private IRepository<Operator> _operatorRepository;
 
         public UnitOfWork()
         {
