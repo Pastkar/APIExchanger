@@ -28,9 +28,9 @@ namespace DataAccessLayer.Repositories
         {
             DB.Clients.Add(client);
         }
-        public void Update(Client client)
+        public void Update(Client client, int id)
         {
-            var previousClient= DB.Clients.Find(client.Id);
+            var previousClient= DB.Clients.Find(id);
 
             if (previousClient != null)
             {

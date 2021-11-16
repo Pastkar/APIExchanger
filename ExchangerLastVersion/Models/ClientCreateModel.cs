@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace BusinessLogic.Entities
+namespace ExchangerLastVersion.Models
 {
-    public class ClientBl
+    public class ClientCreateModel
     {
         public string Name { get; set; }
         public string Surname { get; set; }

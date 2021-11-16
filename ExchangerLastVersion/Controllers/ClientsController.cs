@@ -8,129 +8,84 @@ using BusinessLogic;
 using BusinessLogic.Entities;
 using AutoMapper;
 using ExchangerLastVersion.Models;
+using BusinessLogic.Interfaces;
+using BusinessLogic.Services;
+using System.Net;
 
 namespace ExchangerLastVersion.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ClientsController : Controller
     {
-        public static int currentEditionID;
-
-        public IActionResult AddPage()
+        private IClientServices _clientService;
+        private readonly IMapper _mapper;
+        //IRepositoryBL<ClientBl>
+        public ClientsController(IMapper mapper, IClientServices clientService)
         {
-            return View();
+            _clientService = clientService;
+            _mapper = mapper;
         }
-        public IActionResult AddClients(string name, string surname,  string birthDay, string adress, int phone,int passport)
-        {
-            ClientModel client = new ClientModel()
-            {
-                Name = name,
-                Surname = surname,
-                BirthDay = birthDay,
-                Adress = adress,
-                Phone = phone,
-                Passport = passport
-            };
-
-            using (var db = new BL())
-                db.AddClient(Mapper.Map<ClientBl>(client));
-
-            return Redirect("~/Home/Index");
-        }
-
-        public IActionResult SearchPage()
-        {
-            return View();
-        }
-        public IActionResult SearchResult(string name, string surname)
-        {
-            List<ClientModel> foundClient = new List<ClientModel>();
-
-            using (var db = new BL())
-            {
-                foreach (ClientModel client in Mapper.Map<List<ClientModel>>(db.GetClient()))
-                {
-                    if (client.Name == name && client.Surname == surname)
-                        foundClient.Add(client);
-                }
-            }
-
-            return View("ShowAllPage", foundClient);
-        }
-
-        public IActionResult ShowAllPage()
+        [HttpGet()]
+        public IActionResult GetAll()
         {
             List<ClientModel> list = null;
+            list = _mapper.Map<List<ClientModel>>(_clientService.ReadAll());
 
-            using (var db = new BL())
-                list = Mapper.Map<List<ClientModel>>(db.GetClient());
-
-            return View(list);
+            return Ok(list);
         }
-        public IActionResult Delete(int id)
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
         {
-            using (var db = new BL())
-                db.RemoveClient(id);
-
-            return Redirect("~/Home/Index");
+            var client = _mapper.Map<ClientModel>(_clientService.ReadById(id));
+            return Ok(client);
         }
-        public IActionResult DeleteAllClients()
+        [HttpPost]
+        public IActionResult AddClients([FromBody] ClientCreateModel model)
         {
-            using (var db = new BL())
-            {
-                foreach (ClientModel client in Mapper.Map<List<ClientModel>>(db.GetClient()))
-                    db.RemoveClient(client.Id);
-            }
+            //[FromBody] ClientCreateModel model
+            if (model == null)
+                return BadRequest();
 
-            return Redirect("~/Home/Index");
+            var mappedCarBrand = _mapper.Map<ClientCreateBl>(model);
+            _clientService.Create(mappedCarBrand);
+            //_clientService client = new ClientCreateModel()
+            //{
+            //    Name = name,
+            //    Surname = surname,
+            //    BirthDay = birthDay,
+            //    Adress = adress,
+            //    Phone = phone,
+            //    Passport = passport
+            //};
+            //_clientService.Create(_mapper.Map<ClientCreateBl>(client));
+            //string name, string surname, string birthDay, string adress, int phone, int passport
+            return StatusCode((int)HttpStatusCode.Created);    
         }
-
-        public IActionResult EditPage(int id)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteClient(int id)
         {
-            ClientModel client = null;
-
-            using (var db = new BL())
-            {
-                var clients = Mapper.Map<List<ClientModel>>(db.GetClient());
-                foreach (ClientModel model in clients)
-                {
-                    if (model.Id == id)
-                    {
-                        client = model;
-                        break;
-                    }
-                }
-            }
-
-            if (client != null)
-            {
-                currentEditionID = client.Id;
-                ViewData["ClientName"] = client.Name;
-                ViewData["ClientSurname"] = client.Surname;
-                ViewData["ClientBirthDay"] = client.BirthDay;
-                ViewData["ClientAdress"] = client.Adress;
-                ViewData["ClientPhone"] = client.Phone;
-                ViewData["ClientPassport"] = client.Passport;
-            }
-
-            return View();
+            if (_clientService.ReadById(id) == null)
+                return NotFound();
+            _clientService.Delete(id);
+            return NoContent();
         }
-        public IActionResult SaveChanges(int id, string name, string surname, string birthDay, string adress, int phone, int passport)
+        [HttpPut("{id}")]
+        public IActionResult UpdateClient(int id, [FromBody] ClientCreateModel model)
         {
-            ClientModel Client = new ClientModel()
-            {
-                Id = currentEditionID,
-                Name = name,
-                Surname = surname,
-                BirthDay = birthDay,
-                Adress = adress,
-                Passport = passport,
-                Phone = phone
-        };
-
-            using (var db = new BL())
-                db.UpdateClient(Mapper.Map<ClientBl>(Client));
-
-            return Redirect("~/Home/Index");
+            if (_clientService.ReadById(id) == null)
+                return NotFound();
+            //var newClient = new ClientCreateModel()
+            //{
+            //    Name = name,
+            //    Surname = surname,
+            //    BirthDay = birthDay,
+            //    Adress = adress,
+            //    Passport = passport,
+            //    Phone = phone
+            //};
+            _clientService.UpdateClient(_mapper.Map<ClientCreateBl>(model),id);
+            return Ok();
         }
     }
 }

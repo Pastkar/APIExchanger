@@ -28,7 +28,7 @@ namespace DataAccessLayer.Repositories
         {
             DB.Operators.Add(operetor);
         }
-        public void Update(Operator operetor)
+        public void Update(Operator operetor, int id)
         {
             var previousOperator = DB.Operators.Find(operetor.Id);
 
