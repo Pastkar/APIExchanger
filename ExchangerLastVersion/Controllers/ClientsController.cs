@@ -20,7 +20,6 @@ namespace ExchangerLastVersion.Controllers
     {
         private IClientServices _clientService;
         private readonly IMapper _mapper;
-        //IRepositoryBL<ClientBl>
         public ClientsController(IMapper mapper, IClientServices clientService)
         {
             _clientService = clientService;
@@ -43,7 +42,6 @@ namespace ExchangerLastVersion.Controllers
         [HttpPost]
         public IActionResult AddClients([FromBody] ClientCreateModel model)
         {
-            //[FromBody] ClientCreateModel model
             if (model == null)
                 return BadRequest();
 
