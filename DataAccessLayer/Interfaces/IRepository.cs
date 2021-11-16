@@ -9,7 +9,7 @@ namespace DataAccessLayer.Interfaces
         IEnumerable<T> ReadAll();
         T Read(int id);
         void Create(T item);
-        void Update(T item);
+        void Update(T item,int id);
         void Delete(int id);
     }
 }

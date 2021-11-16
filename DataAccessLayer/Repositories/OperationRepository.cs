@@ -28,7 +28,7 @@ namespace DataAccessLayer.Repositories
         {
             DB.Operations.Add(game);
         }
-        public void Update(Operation game)
+        public void Update(Operation game,int id    )
         {
             
         }

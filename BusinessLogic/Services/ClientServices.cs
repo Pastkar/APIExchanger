@@ -72,7 +72,7 @@ namespace BusinessLogic.Services
             if (toUpdate != null)
             {
                 toUpdate = _mapper.Map<Client>(element);
-                _dB.Clients.Update(toUpdate);
+                _dB.Clients.Update(toUpdate,id);
                 _dB.Save();
             }
         }
