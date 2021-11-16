@@ -21,9 +21,9 @@ namespace ExchangerLastVersion.Controllers
         private IClientServices _clientService;
         private readonly IMapper _mapper;
         //IRepositoryBL<ClientBl>
-        public ClientsController(IMapper mapper, IClientServices carBrandService)
+        public ClientsController(IMapper mapper, IClientServices clientService)
         {
-            _clientService = carBrandService;
+            _clientService = clientService;
             _mapper = mapper;
         }
         [HttpGet()]
@@ -49,7 +49,7 @@ namespace ExchangerLastVersion.Controllers
 
             var mappedCarBrand = _mapper.Map<ClientCreateBl>(model);
             _clientService.Create(mappedCarBrand);
-            //ClientCreateModel client = new ClientCreateModel()
+            //_clientService client = new ClientCreateModel()
             //{
             //    Name = name,
             //    Surname = surname,
@@ -58,7 +58,7 @@ namespace ExchangerLastVersion.Controllers
             //    Phone = phone,
             //    Passport = passport
             //};
-            //_carBrandService.Create(_mapper.Map<ClientCreateBl>(client));
+            //_clientService.Create(_mapper.Map<ClientCreateBl>(client));
             //string name, string surname, string birthDay, string adress, int phone, int passport
             return StatusCode((int)HttpStatusCode.Created);    
         }
