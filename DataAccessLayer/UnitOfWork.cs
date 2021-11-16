@@ -10,14 +10,14 @@ namespace DataAccessLayer
 {
     public class UnitOfWork: IUnitOfWork
     {
-        private Context DataBase { get; }
+        private Context _dataBase { get; }
         private IRepository<Client> _clientRepository;
         private IRepository<Operation> _operationRepository;
         private IRepository<Operator> _operatorRepository;
 
         public UnitOfWork()
         {
-            DataBase = new Context();
+            _dataBase = new Context();
         }
 
         public IRepository<Client> Clients
@@ -25,7 +25,7 @@ namespace DataAccessLayer
             get
             {
                 if (_clientRepository == null)
-                    _clientRepository = new ClientRepository(DataBase);
+                    _clientRepository = new ClientRepository(_dataBase);
                 return _clientRepository;
             }
         }
@@ -34,7 +34,7 @@ namespace DataAccessLayer
             get
             {
                 if (_operationRepository == null)
-                    _operationRepository = new OperationRepository(DataBase);
+                    _operationRepository = new OperationRepository(_dataBase);
                 return _operationRepository;
             }
         }
@@ -43,19 +43,19 @@ namespace DataAccessLayer
             get
             {
                 if (_operatorRepository == null)
-                    _operatorRepository = new OperatorRepository(DataBase);
+                    _operatorRepository = new OperatorRepository(_dataBase);
                 return _operatorRepository;
             }
         }
 
         public void Save()
         {
-            DataBase.SaveChanges();
+            _dataBase.SaveChanges();
         }
 
         public void Dispose()
         {
-            DataBase.Dispose();
+            _dataBase.Dispose();
         }
     }
 }
